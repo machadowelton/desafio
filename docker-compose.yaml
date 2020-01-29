@@ -1,0 +1,12 @@
+version: '2'
+services:
+    mongdb_products:
+        image: mongodb_products
+        container_name: "mongodb_products"
+        ports:
+            - 27017:27017
+    mongodb_users:
+        image: mongodb_users
+        container_name: "mongodb_users"
+        ports:
+            - 27018:27017

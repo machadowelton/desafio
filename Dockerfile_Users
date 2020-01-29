@@ -1,0 +1,7 @@
+FROM mongo
+
+ENV MONGO_INITDB_DATABASE users
+
+COPY init-database-users.js /docker-entrypoint-initdb.d/
+
+EXPOSE 27017
