@@ -1,0 +1,474 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "a",
+    "version": "1.0.0",
+    "title": "Desafio",
+    "termsOfService": "",
+    "contact": {
+      "email": "work.leao@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:8080",
+  "tags": [
+    {
+      "name": "Usuários",
+      "description": "Endpoint para consulta, inserção, alteração e exlusão de usuários"
+    },
+    {
+      "name": "Produtos",
+      "description": "Endpoint de produtos para consulta e associação com usuários"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/produtos": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "",
+        "description": "Lista todos os produtos",
+        "operationId": "listarTodos",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos localizados",
+            "schema": {
+              "$ref": "#/definitions/Produtos"
+            }
+          },
+          "404": {
+            "description": "Nenhum produto localizado"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    },
+    "/produtos/usuarios": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "",
+        "description": "Lista usuários que contenham alguma associação ativa a um produto",
+        "operationId": "listarUsuariosProduto",
+        "parameters": [
+          {
+            "name": "id_produto",
+            "in": "query",
+            "description": "id do produto",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuários localizados",
+            "schema": {
+              "$ref": "#/definitions/Usuarios"
+            }
+          },
+          "404": {
+            "description": "Nenhum produto localizado"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    },
+    "/produtos/associar/usuario": {
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "",
+        "description": "Associa um usuário a um determinado produto",
+        "operationId": "associarProdutoUsuario",
+        "parameters": [
+          {
+            "name": "nome_produto",
+            "in": "query",
+            "required": true,
+            "description": "nome do produto",
+            "type": "string"
+          },
+          {
+            "name": "id_usuario",
+            "in": "query",
+            "required": true,
+            "description": "id do usuario",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação realizada com sucesso"
+          },
+          "404": {
+            "description": "Produto ou Usuário não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    },
+    "/usuarios": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Lista todos os usuários",
+        "operationId": "listarTodosUsuarios",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuários localizados",
+            "schema": {
+              "$ref": "#/definitions/Usuarios"
+            }
+          },
+          "404": {
+            "description": "Nenhum usuário localizado"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Cadastra um novo usuário",
+        "operationId": "inserir",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "body do usuario",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UsuarioSemId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário inserido com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          },
+          "401": {
+            "description": "Ocorreu um erro de validação de dados"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    },
+    "/usuarios/{id}/produtos": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Lista os protudos associados a um usuário",
+        "operationId": "buscarProdutosPorIdUsuario",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos localizados",
+            "schema": {
+              "$ref": "#/definitions/ProdutosDTO"
+            }
+          },
+          "404": {
+            "description": "Usuário ou produto não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Buscar um usuário pelo id",
+        "operationId": "buscarPorId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          },
+          "404": {
+            "description": "Nenhum usuário encontrado pelo id"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Altera um determinado usuário pelo id",
+        "operationId": "atualizar",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "body do usuario",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UsuarioSemId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          },
+          "401": {
+            "description": "Ocorreu um erro de validação de dados"
+          },
+          "404": {
+            "description": "Nenhum usuário encontrado pelo id"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "",
+        "description": "Exclui um determinado usuário pelo id",
+        "operationId": "removerPeloId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado"
+          },
+          "404": {
+            "description": "Nenhum usuário encontrado pelo id"
+          },
+          "500": {
+            "description": "Ocorreu um erro ao processar a requisição"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ProdutosDTO": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ProdutoDTO"
+      }
+    },
+    "ProdutoDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id do produto"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nome do produto",
+          "example": "ESCOLAR"
+        },
+        "idRelacao": {
+          "type": "string",
+          "description": "Id da relação usuário e produto"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "USADO",
+            "EM_USO"
+          ],
+          "description": "Status da relação do usuário com produto"
+        }
+      }
+    },
+    "Produtos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Produto"
+      }
+    },
+    "Produto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id do produto"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nome do produto",
+          "example": "ESCOLAR"
+        }
+      }
+    },
+    "Usuarios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Usuario"
+      }
+    },
+    "Usuario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id do usuário"
+        },
+        "nomeCompleto": {
+          "type": "string",
+          "description": "Nome completo do usuário",
+          "example": "Wanderley"
+        },
+        "cpf": {
+          "type": "string",
+          "description": "Cpf do usuario",
+          "example": "12345678989"
+        },
+        "telefone": {
+          "type": "string",
+          "description": "Telefone do usuario",
+          "example": "11989566598"
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço do usuario",
+          "example": "Rua dos Jabutis, nº 440"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email do usuario",
+          "example": "email@email.com"
+        }
+      }
+    },
+    "UsuarioSemId": {
+      "type": "object",
+      "properties": {
+        "nomeCompleto": {
+          "type": "string",
+          "description": "Nome completo do usuário",
+          "example": "Wanderley"
+        },
+        "cpf": {
+          "type": "string",
+          "description": "Cpf do usuario",
+          "example": "12345678989"
+        },
+        "telefone": {
+          "type": "string",
+          "description": "Telefone do usuario",
+          "example": "11989566598"
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço do usuario",
+          "example": "Rua dos Jabutis, nº 440"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email do usuario",
+          "example": "email@email.com"
+        }
+      }
+    }
+  }
+}
