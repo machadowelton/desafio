@@ -3,7 +3,6 @@ package br.com.machadowelton.services.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.machadowelton.domain.Produto;
@@ -16,8 +15,11 @@ import br.com.machadowelton.services.repositories.products.ProdutoRepository;
 public class ProdutoServiceImpl implements ProdutoService {
 
 	
-	@Autowired
-	private ProdutoRepository repository;
+	private final ProdutoRepository repository;
+	
+	public ProdutoServiceImpl(final ProdutoRepository repository) {
+		this.repository = repository;
+	}
 	
 	@Override
 	public List<Produto> listarTodos() {
